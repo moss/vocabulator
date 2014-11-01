@@ -1,1 +1,2 @@
-__author__ = 'moss'
+def meatify(text):
+    return ""
