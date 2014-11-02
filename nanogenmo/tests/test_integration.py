@@ -10,7 +10,7 @@ When he woke up, he had to go buy some tools.  It was boring too.
 
 AFTER_MEATIFYING = """
 Once there was a meat.  He had a meat.  He went to a meat.  He was very
-bored!  When the meat was over he went home and ate meat.  It was
+bored!  When the meat was over he went meat and ate meat.  It was
 delicious!  The meat was so filling that he went to sleep.
 
 When he woke up, he had to go buy some meats.  It was boring too.

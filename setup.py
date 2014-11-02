@@ -8,5 +8,8 @@ setup(name='nanogenmo',
       author='Moss Collum',
       author_email='moss@makingcodespeak.com',
       packages=['nanogenmo'],
-      requires=['pytest'],
+      requires=[
+          'textblob',
+          'pytest',
+          ],
      )
