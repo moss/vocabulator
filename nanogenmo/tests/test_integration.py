@@ -1,4 +1,4 @@
-import nanogenmo
+from nanogenmo.cli import meatify
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very
@@ -16,5 +16,6 @@ delicious!  The meat was so filling that he went to sleep.
 When he woke up, he had to go buy some meats.  It was boring too.
 """
 
+
 def test_integration():
-    assert nanogenmo.meatify(SOURCE_TEXT) == AFTER_MEATIFYING
+    assert meatify(SOURCE_TEXT) == AFTER_MEATIFYING
