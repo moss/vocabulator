@@ -1,3 +1,4 @@
+import sys
 from nanogenmo.documents import Document
 
 
@@ -7,3 +8,9 @@ def meatify(text):
         if chunk.is_noun():
             chunk.replace_with('meat')
     return str(d)
+
+def meatify_cmd():
+    filename = sys.argv[1]
+    with open(filename) as f:
+        text = f.read()
+        print(meatify(text))

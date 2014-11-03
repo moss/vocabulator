@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(name='nanogenmo',
       version='1.0',
@@ -12,4 +12,9 @@ setup(name='nanogenmo',
           'textblob',
           'pytest',
           ],
+      entry_points={
+          'console_scripts': [
+              'meatify = nanogenmo.cli:meatify_cmd'
+          ],
+      },
      )
