@@ -1,37 +1,54 @@
 from itertools import cycle
-import sys
+from docopt import docopt
 from vocabulator.documents import Document
 
 
-def meatify(text):
-    d = Document(text)
-    for chunk in d.chunks:
-        if chunk.is_noun():
-            chunk.replace_with('meat')
-    return str(d)
+class Vocabulator:
+    def __init__(self):
+        self.document = None
+        self.nouns = None
+
+    def use_document(self, document_file):
+        self.document = Document.from_file(document_file)
+
+    def use_document_text(self, document_text):
+        self.document = Document(document_text)
+
+    def use_nouns(self, nouns):
+        self.nouns = nouns
+
+    def use_nouns_from(self, noun_text_file):
+        noun_document = Document.from_file(noun_text_file)
+        self.nouns = self.nouns_from(noun_document)
+
+    def use_nouns_from_text(self, noun_text):
+        noun_document = Document(noun_text)
+        self.nouns = self.nouns_from(noun_document)
+
+    def vocabulate(self):
+        nouns = iter(cycle(self.nouns))
+        for chunk in self.document.chunks:
+            if chunk.is_noun():
+                chunk.replace_with(next(nouns))
+        return str(self.document)
+
+    @staticmethod
+    def nouns_from(document):
+        return [c.singular_form() for c in document.chunks if c.is_noun()]
 
 
-def meatify_cmd():
-    filename = sys.argv[1]
-    with open(filename) as f:
-        text = f.read()
-        print(meatify(text))
+def vocabulator():
+    """
+    Create hybrid novels.
 
-
-def nouns_from(document):
-    return [c.singular_form() for c in document.chunks if c.is_noun()]
-
-
-def swap_nouns(target, source):
-    target = Document(target)
-    source = Document(source)
-    nouns = iter(cycle(nouns_from(source)))
-    for chunk in target.chunks:
-        if chunk.is_noun():
-            chunk.replace_with(next(nouns))
-    return str(target)
-
-
-def swap_nouns_cmd():
-    with open(sys.argv[1]) as f1, open(sys.argv[2]) as f2:
-        print(swap_nouns(f1.read(), f2.read()))
+    Usage:
+      vocabulator (--nouns-from <noun-text> | --nouns <nouns>) <target-text>
+    """
+    opt = docopt(vocabulator.__doc__)
+    v = Vocabulator()
+    v.use_document(opt['<target-text>'])
+    if opt['--nouns-from']:
+        v.use_nouns_from(opt['<noun-text>'])
+    elif opt['--nouns']:
+        v.use_nouns(opt['<nouns>'].split(','))
+    print(v.vocabulate())

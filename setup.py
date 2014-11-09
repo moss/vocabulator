@@ -11,11 +11,11 @@ setup(name='vocabulator',
       requires=[
           'textblob',
           'pytest',
-          ],
+          'docopt',
+      ],
       entry_points={
           'console_scripts': [
-              'meatify = vocabulator.cli:meatify_cmd',
-              'swap_nouns = vocabulator.cli:swap_nouns_cmd',
+              'vocabulator = vocabulator.cli:vocabulator',
           ],
       },
       )

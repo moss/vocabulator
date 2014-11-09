@@ -1,12 +1,12 @@
 # Done
 
+* Unify the vocabulator CLI tool
 
 # WIP
 
 
 # TODO
 
-* Unify the vocabulator CLI tool
 * Map nouns stably
 * Map by frequency, not first appearance
 * Map verbs

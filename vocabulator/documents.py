@@ -8,6 +8,11 @@ class Document:
         self.blob = TextBlob(source)
         self.chunks = list(self._calculate_chunks())
 
+    @classmethod
+    def from_file(cls, path):
+        with open(path) as f:
+            return Document(f.read())
+
     def _calculate_chunks(self):
         position = 0
         for word, tag in self.blob.pos_tags:
