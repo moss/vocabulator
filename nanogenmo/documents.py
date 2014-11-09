@@ -13,7 +13,7 @@ class Document:
             start_position = self.source.find(word, position)
             end_position = start_position + len(word)
             if start_position > position:
-                yield InterstitialChunk(self.source, position, start_position)
+                yield InterstitialChunk(source=self.source, start=position, end=start_position)
             yield DocWord(source=self.source, word=word, start=start_position, end=end_position)
             position = end_position
         if position < len(self.source):

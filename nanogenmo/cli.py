@@ -9,6 +9,7 @@ def meatify(text):
             chunk.replace_with('meat')
     return str(d)
 
+
 def meatify_cmd():
     filename = sys.argv[1]
     with open(filename) as f:

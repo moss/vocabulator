@@ -17,4 +17,4 @@ setup(name='nanogenmo',
               'meatify = nanogenmo.cli:meatify_cmd'
           ],
       },
-     )
+      )
