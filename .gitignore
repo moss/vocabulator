@@ -1,3 +1,4 @@
 __pycache__
 .ipynb_checkpoints
 nanogenmo.egg-info
+pg*.txt
