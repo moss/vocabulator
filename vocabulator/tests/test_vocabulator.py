@@ -1,5 +1,5 @@
-from vocabulator.cli import Vocabulator, nouns_from
 from vocabulator.documents import Document
+from vocabulator.vocabulator import Vocabulator, nouns_from
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very

@@ -4,26 +4,10 @@ vocabulator - Create hybrid novels.
 Usage:
   vocabulator (--nouns-from <noun-text> | --nouns <nouns>) <target-text>
 """
-from itertools import cycle
 from docopt import docopt
+
 from vocabulator.documents import Document
-
-
-class Vocabulator:
-    def __init__(self, document=None, nouns=None):
-        self.document = document
-        self.nouns = nouns
-
-    def vocabulate(self):
-        nouns = iter(cycle(self.nouns))
-        for chunk in self.document.chunks:
-            if chunk.is_noun():
-                chunk.replace_with(next(nouns))
-        return str(self.document)
-
-
-def nouns_from(document):
-    return [c.singular_form() for c in document.chunks if c.is_noun()]
+from vocabulator.vocabulator import Vocabulator, nouns_from
 
 
 class VocabulatorOptions:
