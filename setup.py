@@ -2,20 +2,20 @@
 
 from setuptools import setup
 
-setup(name='nanogenmo',
+setup(name='vocabulator',
       version='1.0',
       description="Moss's NaNoGenMo Novel",
       author='Moss Collum',
       author_email='moss@makingcodespeak.com',
-      packages=['nanogenmo'],
+      packages=['vocabulator'],
       requires=[
           'textblob',
           'pytest',
           ],
       entry_points={
           'console_scripts': [
-              'meatify = nanogenmo.cli:meatify_cmd',
-              'swap_nouns = nanogenmo.cli:swap_nouns_cmd',
+              'meatify = vocabulator.cli:meatify_cmd',
+              'swap_nouns = vocabulator.cli:swap_nouns_cmd',
           ],
       },
       )

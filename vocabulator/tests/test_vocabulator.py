@@ -1,4 +1,4 @@
-from nanogenmo.cli import meatify, swap_nouns
+from vocabulator.cli import meatify, swap_nouns
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very

@@ -1,6 +1,6 @@
 from itertools import cycle
 import sys
-from nanogenmo.documents import Document
+from vocabulator.documents import Document
 
 
 def meatify(text):
