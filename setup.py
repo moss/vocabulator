@@ -14,7 +14,8 @@ setup(name='nanogenmo',
           ],
       entry_points={
           'console_scripts': [
-              'meatify = nanogenmo.cli:meatify_cmd'
+              'meatify = nanogenmo.cli:meatify_cmd',
+              'swap_nouns = nanogenmo.cli:swap_nouns_cmd',
           ],
       },
       )

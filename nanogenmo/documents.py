@@ -1,4 +1,5 @@
 from textblob import TextBlob, Word
+from textblob.en.inflect import pluralize
 
 
 class Document:
@@ -55,8 +56,11 @@ class DocWord(Chunk):
     def is_noun(self):
         return self.pos_tag in ['NN', 'NNS']
 
+    def singular_form(self):
+        return self.word.singularize()
+
     def replace_with(self, replacement):
         if self.pos_tag == 'NNS':
-            super().replace_with(replacement + 's')
+            super().replace_with(pluralize(replacement))
         else:
             super().replace_with(replacement)
