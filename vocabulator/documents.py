@@ -1,3 +1,4 @@
+import re
 from textblob import TextBlob, Word
 from textblob.en.inflect import pluralize
 
@@ -59,6 +60,8 @@ class DocWord(Chunk):
         return self.word.pos_tag
 
     def is_noun(self):
+        if not re.match(r"[A-Za-z']+$", self.word):
+            return False
         return self.pos_tag in ['NN', 'NNS']
 
     def singular_form(self):

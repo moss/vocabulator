@@ -53,3 +53,9 @@ def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
     assert r.find_replacement('table') == 'hand'  # stable replacements for same word later on
     assert r.find_replacement('desk') == 'eye'  # skips duplicates in source noun list
     assert r.find_replacement('lens') == 'elbow'  # finally does loop back around again
+
+def test_should_not_mistake_things_for_nouns_if_they_have_no_letters():
+    d = Document('_You_ want to tell me, and I have no objection to hearing it.')
+    first_chunk = d.chunks[0]
+    assert first_chunk.word == '_'  # if not, this test needs updating
+    assert not first_chunk.is_noun()
