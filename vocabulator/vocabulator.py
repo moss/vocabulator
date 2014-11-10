@@ -1,4 +1,4 @@
-from itertools import cycle
+from itertools import cycle, filterfalse
 
 __author__ = 'moss'
 
@@ -19,13 +19,20 @@ class Vocabulator:
 
 class Replacements:
     def __init__(self, nouns):
-        self.nouns = iter(cycle(nouns))
+        self.seen = set()
+        has_been_seen = lambda w: w in self.seen
+        self.nouns = iter(cycle(filterfalse(has_been_seen, nouns)))
         self.replacements = {}
 
     def find_replacement(self, word):
         if word not in self.replacements:
-            self.replacements[word] = next(self.nouns)
+            self.replacements[word] = self.next_replacement()
         return self.replacements[word]
+
+    def next_replacement(self):
+        replacement = next(self.nouns)
+        self.seen.add(replacement)
+        return replacement
 
 
 def nouns_from(document):

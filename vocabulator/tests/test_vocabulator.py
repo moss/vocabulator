@@ -36,11 +36,12 @@ delicious!  The spine was so filling that he went to sleep.
 When he woke up, he had to go buy some scientists.  It was boring too.
 """
 
+
 def test_swap_nouns_the_other_way():
     v = Vocabulator(document=Document(ANOTHER_SOURCE), nouns=nouns_from(Document(SOURCE_TEXT)))
     assert v.vocabulate() == """
 Winston was a man. One hat he ventured into the parties. He found
-a party with purple homes!
+a home with purple cakes!
 """
 
 def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
@@ -50,5 +51,5 @@ def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
     assert r.find_replacement('table') == 'hand'  # stable replacements for same word
     assert r.find_replacement('chair') == 'arm'
     assert r.find_replacement('table') == 'hand'  # stable replacements for same word later on
-    # assert r.find_replacement('desk') == 'eye'  # skips duplicates in source noun list
-    # assert r.find_replacement('lens') == 'what should happen here?'
+    assert r.find_replacement('desk') == 'eye'  # skips duplicates in source noun list
+    assert r.find_replacement('lens') == 'elbow'  # finally does loop back around again
