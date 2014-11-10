@@ -6,13 +6,13 @@ __author__ = 'moss'
 class Vocabulator:
     def __init__(self, document=None, nouns=None):
         self.document = document
+        self.replacements = Replacements(nouns)
         self.nouns = nouns
 
     def vocabulate(self):
-        replacements = Replacements(self.nouns)
         for chunk in self.document.chunks:
             if chunk.is_noun():
-                replacement = replacements.find_replacement(chunk.singular_form())
+                replacement = self.replacements.find_replacement(chunk.singular_form())
                 chunk.replace_with(replacement)
         return str(self.document)
 
@@ -33,6 +33,13 @@ class Replacements:
         replacement = next(self.nouns)
         self.seen.add(replacement)
         return replacement
+
+    def print_mapping(self):
+        print("\n\nReplacements Used:")
+        for word in sorted(self.replacements.keys()):
+            one = word
+            other = self.replacements[word][0:]  # [0:] works around weirdness with Word class
+            print("%s -> %s" % (one, other))
 
 
 def nouns_from(document):

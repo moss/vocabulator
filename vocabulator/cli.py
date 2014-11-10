@@ -31,3 +31,5 @@ def vocabulator():
     opt = VocabulatorOptions()
     v = opt.vocabulator()
     print(v.vocabulate())
+    print()
+    v.replacements.print_mapping()

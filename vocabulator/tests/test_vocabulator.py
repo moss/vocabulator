@@ -44,6 +44,7 @@ Winston was a man. One hat he ventured into the parties. He found
 a home with purple cakes!
 """
 
+
 def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
     r = Replacements(['elbow', 'hand', 'arm', 'hand', 'eye'])
     assert r.find_replacement('bowl') == 'elbow'
@@ -53,6 +54,24 @@ def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
     assert r.find_replacement('table') == 'hand'  # stable replacements for same word later on
     assert r.find_replacement('desk') == 'eye'  # skips duplicates in source noun list
     assert r.find_replacement('lens') == 'elbow'  # finally does loop back around again
+
+
+def test_replacements_are_printable(capsys):
+    r = Replacements(['elbow', 'hand', 'arm', 'hand', 'eye'])
+    for w in ['bowl', 'table', 'chair', 'desk', 'lens']:
+        r.find_replacement(w)
+    r.print_mapping()
+    out, err = capsys.readouterr()
+    assert out == """
+
+Replacements Used:
+bowl -> elbow
+chair -> arm
+desk -> eye
+lens -> elbow
+table -> hand
+"""
+
 
 def test_should_not_mistake_things_for_nouns_if_they_have_no_letters():
     d = Document('_You_ want to tell me, and I have no objection to hearing it.')
