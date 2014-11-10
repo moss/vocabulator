@@ -1,5 +1,5 @@
 from vocabulator.documents import Document
-from vocabulator.vocabulator import Vocabulator, nouns_from
+from vocabulator.vocabulator import Vocabulator, nouns_from, Replacements
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very
@@ -30,10 +30,10 @@ def test_swap_nouns():
     v = Vocabulator(document=Document(SOURCE_TEXT), nouns=nouns_from(Document(ANOTHER_SOURCE)))
     assert v.vocabulate() == """
 Once there was a scientist.  He had a day.  He went to a wood.  He was very
-bored!  When the badger was over he went spine and ate scientist.  It was
-delicious!  The day was so filling that he went to sleep.
+bored!  When the wood was over he went badger and ate spine.  It was
+delicious!  The spine was so filling that he went to sleep.
 
-When he woke up, he had to go buy some woods.  It was boring too.
+When he woke up, he had to go buy some scientists.  It was boring too.
 """
 
 def test_swap_nouns_the_other_way():
@@ -42,3 +42,13 @@ def test_swap_nouns_the_other_way():
 Winston was a man. One hat he ventured into the parties. He found
 a party with purple homes!
 """
+
+def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
+    r = Replacements(['elbow', 'hand', 'arm', 'hand', 'eye'])
+    assert r.find_replacement('bowl') == 'elbow'
+    assert r.find_replacement('table') == 'hand'
+    assert r.find_replacement('table') == 'hand'  # stable replacements for same word
+    assert r.find_replacement('chair') == 'arm'
+    assert r.find_replacement('table') == 'hand'  # stable replacements for same word later on
+    # assert r.find_replacement('desk') == 'eye'  # skips duplicates in source noun list
+    # assert r.find_replacement('lens') == 'what should happen here?'

@@ -9,11 +9,23 @@ class Vocabulator:
         self.nouns = nouns
 
     def vocabulate(self):
-        nouns = iter(cycle(self.nouns))
+        replacements = Replacements(self.nouns)
         for chunk in self.document.chunks:
             if chunk.is_noun():
-                chunk.replace_with(next(nouns))
+                replacement = replacements.find_replacement(chunk.singular_form())
+                chunk.replace_with(replacement)
         return str(self.document)
+
+
+class Replacements:
+    def __init__(self, nouns):
+        self.nouns = iter(cycle(nouns))
+        self.replacements = {}
+
+    def find_replacement(self, word):
+        if word not in self.replacements:
+            self.replacements[word] = next(self.nouns)
+        return self.replacements[word]
 
 
 def nouns_from(document):
