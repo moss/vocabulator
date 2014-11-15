@@ -57,6 +57,12 @@ class DocWord(Chunk):
 
     @property
     def pos_tag(self):
+        """
+        Part of speech tag, which could be one of:
+          CC, CD, DT, EX, FW, IN, JJ, JJR, JJS, MD, NN, NNP, NNS, POS,
+          PRP, PRP$, RB, RBR, RBS, TO, UH, VB, VBD, VBG, VBN, VBP, VBZ,
+          WDT, WP, WP$, WRB
+        """
         return self.word.pos_tag
 
     def is_noun(self):
