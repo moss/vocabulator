@@ -1,7 +1,5 @@
 from itertools import cycle, filterfalse
 
-__author__ = 'moss'
-
 
 class Vocabulator:
     def __init__(self, document=None, nouns=None):
