@@ -2,7 +2,12 @@
 vocabulator - Create hybrid novels.
 
 Usage:
-  vocabulator (--nouns-from <noun-text> | --nouns <nouns>) <target-text>
+  vocabulator (-n <noun-text> | -N <nouns>) [-m] <target-text>
+
+Options:
+  -n --nouns-from     Specify a source text to provide nouns for the hybrid.
+  -N --nouns          Give a (comma-delimited) list of nouns to use.
+  -m --print-mapping  List word mapping used at the end of the text.
 """
 from docopt import docopt
 
@@ -26,10 +31,15 @@ class VocabulatorOptions:
     def vocabulator(self):
         return Vocabulator(document=self.document(), nouns=self.nouns())
 
+    @property
+    def print_mapping(self):
+        return self.options['--print-mapping']
+
 
 def vocabulator():
     opt = VocabulatorOptions()
     v = opt.vocabulator()
     print(v.vocabulate())
     print()
-    v.replacements.print_mapping()
+    if opt.print_mapping:
+        v.replacements.print_mapping()
