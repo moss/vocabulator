@@ -1,5 +1,5 @@
-from vocabulator.documents import Document
-from vocabulator.vocabulator import Vocabulator, nouns_from, Replacements
+from vocabulator.documents import Document, PartOfSpeech
+from vocabulator.vocabulator import Vocabulator, words_from, Replacements
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very
@@ -27,7 +27,7 @@ When he woke up, he had to go buy some meat.  It was boring too.
 
 
 def test_swap_nouns():
-    v = Vocabulator(document=Document(SOURCE_TEXT), nouns=nouns_from(Document(ANOTHER_SOURCE)))
+    v = Vocabulator(document=Document(SOURCE_TEXT), nouns=words_from(Document(ANOTHER_SOURCE), PartOfSpeech.noun))
     assert v.vocabulate() == """
 Once there was a scientist.  He had a day.  He went to a wood.  He was very
 bored!  When the wood was over he went badger and ate spine.  It was
@@ -38,7 +38,7 @@ When he woke up, he had to go buy some scientists.  It was boring too.
 
 
 def test_swap_nouns_the_other_way():
-    v = Vocabulator(document=Document(ANOTHER_SOURCE), nouns=nouns_from(Document(SOURCE_TEXT)))
+    v = Vocabulator(document=Document(ANOTHER_SOURCE), nouns=words_from(Document(SOURCE_TEXT), PartOfSpeech.noun))
     assert v.vocabulate() == """
 Winston was a man. One hat he ventured into the parties. He found
 a home with purple cakes!
@@ -77,4 +77,4 @@ def test_should_not_mistake_things_for_nouns_if_they_have_no_letters():
     d = Document('_You_ want to tell me, and I have no objection to hearing it.')
     first_chunk = d.chunks[0]
     assert first_chunk.word == '_'  # if not, this test needs updating
-    assert not first_chunk.is_noun()
+    assert not first_chunk.is_pos(PartOfSpeech.noun)

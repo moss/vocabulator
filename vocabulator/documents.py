@@ -1,3 +1,4 @@
+from enum import Enum
 import re
 from textblob import TextBlob, Word
 from textblob.en.inflect import pluralize
@@ -30,6 +31,13 @@ class Document:
         return ''.join(str(c) for c in self.chunks)
 
 
+class PartOfSpeech(Enum):
+    noun = ('NN', 'NNS')
+
+    def __init__(self, *options):
+        self.options = options
+
+
 class Chunk:
     def __init__(self, source="", start=0, end=0):
         self.source = source
@@ -45,7 +53,7 @@ class Chunk:
 
 
 class InterstitialChunk(Chunk):
-    def is_noun(self):
+    def is_pos(self, pos: PartOfSpeech):
         return False
 
 
@@ -65,10 +73,10 @@ class DocWord(Chunk):
         """
         return self.word.pos_tag
 
-    def is_noun(self):
+    def is_pos(self, pos: PartOfSpeech):
         if not re.match(r"[A-Za-z']+$", self.word):
             return False
-        return self.pos_tag in ['NN', 'NNS']
+        return self.pos_tag in pos.options
 
     def singular_form(self):
         return self.word.singularize()

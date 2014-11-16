@@ -11,8 +11,8 @@ Options:
 """
 from docopt import docopt
 
-from vocabulator.documents import Document
-from vocabulator.vocabulator import Vocabulator, nouns_from
+from vocabulator.documents import Document, PartOfSpeech
+from vocabulator.vocabulator import Vocabulator, words_from
 
 
 class VocabulatorOptions:
@@ -24,7 +24,7 @@ class VocabulatorOptions:
 
     def nouns(self):
         if self.options['--nouns-from']:
-            return nouns_from(Document.from_file(self.options['<noun-text>']))
+            return words_from(Document.from_file(self.options['<noun-text>']), PartOfSpeech.noun)
         elif self.options['--nouns']:
             return self.options['<nouns>'].split(',')
 

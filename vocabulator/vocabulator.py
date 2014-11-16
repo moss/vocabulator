@@ -1,4 +1,5 @@
 from itertools import cycle, filterfalse
+from vocabulator.documents import PartOfSpeech
 
 
 class Vocabulator:
@@ -9,17 +10,17 @@ class Vocabulator:
 
     def vocabulate(self):
         for chunk in self.document.chunks:
-            if chunk.is_noun():
+            if chunk.is_pos(PartOfSpeech.noun):
                 replacement = self.replacements.find_replacement(chunk.singular_form())
                 chunk.replace_with(replacement)
         return str(self.document)
 
 
 class Replacements:
-    def __init__(self, nouns):
+    def __init__(self, words):
         self.seen = set()
         has_been_seen = lambda w: w in self.seen
-        self.nouns = iter(cycle(filterfalse(has_been_seen, nouns)))
+        self.words = iter(cycle(filterfalse(has_been_seen, words)))
         self.replacements = {}
 
     def find_replacement(self, word):
@@ -28,7 +29,7 @@ class Replacements:
         return self.replacements[word]
 
     def next_replacement(self):
-        replacement = next(self.nouns)
+        replacement = next(self.words)
         self.seen.add(replacement)
         return replacement
 
@@ -40,5 +41,5 @@ class Replacements:
             print("%s -> %s" % (one, other))
 
 
-def nouns_from(document):
-    return [c.singular_form() for c in document.chunks if c.is_noun()]
+def words_from(document, pos):
+    return [c.singular_form() for c in document.chunks if c.is_pos(pos)]
