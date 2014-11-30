@@ -26,10 +26,12 @@ class Replacements:
     def __init__(self, words):
         self.seen = set()
         has_been_seen = lambda w: w in self.seen
-        self.words = iter(cycle(filterfalse(has_been_seen, words)))
+        lower = lambda w: w.lower()
+        self.words = iter(cycle(filterfalse(has_been_seen, map(lower, words))))
         self.replacements = {}
 
     def find_replacement(self, word):
+        word = word.lower()
         if word not in self.replacements:
             self.replacements[word] = self.next_replacement()
         return self.replacements[word]

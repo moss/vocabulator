@@ -3,10 +3,10 @@
 * Unify the vocabulator CLI tool
 * Map nouns stably
 * Map adverbs
+* Correct capitalization
 
 # WIP
 
-* Correct capitalization
 
 # TODO
 

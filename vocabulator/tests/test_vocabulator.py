@@ -66,8 +66,8 @@ def test_replacing_a_word_preserves_case():
 
 
 def test_replacements_are_printable(capsys):
-    r = Replacements(['elbow', 'hand', 'arm', 'hand', 'eye'])
-    for w in ['bowl', 'table', 'chair', 'desk', 'lens']:
+    r = Replacements(['Elbow', 'hand', 'ARM', 'Hand', 'eye'])
+    for w in ['bowl', 'Table', 'chair', 'DESK', 'lens', 'desk']:
         r.find_replacement(w)
     r.print_mapping()
     out, err = capsys.readouterr()
