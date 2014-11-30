@@ -4,13 +4,13 @@
 * Map nouns stably
 * Map adverbs
 * Correct capitalization
+* Stopwords not to map
 
 # WIP
 
 
 # TODO
 
-* Stopwords not to map
 
 # Someday/Maybe
 

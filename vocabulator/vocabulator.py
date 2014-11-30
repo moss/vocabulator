@@ -2,12 +2,21 @@ from itertools import cycle, filterfalse
 from vocabulator.documents import PartOfSpeech
 
 
+def little_word(word):
+    return len(word) < 3
+
+
+def skippable_adverb(word):
+    # non -ly adverbs generally prove to be bad for replacing
+    return (not word.endswith('ly')) or word in {'only', 'nearly', 'previously', 'usually', 'fairly`'}
+
+
 class Vocabulator:
     def __init__(self, document=None, nouns=None, adverbs=None):
         self.document = document
-        self.noun_replacements = Replacements(nouns)
+        self.noun_replacements = Replacements(nouns, little_word)
         if adverbs is not None:
-            self.adverb_replacements = Replacements(adverbs)
+            self.adverb_replacements = Replacements(adverbs, skippable_adverb)
         else:
             self.adverb_replacements = None
 
@@ -23,15 +32,20 @@ class Vocabulator:
 
 
 class Replacements:
-    def __init__(self, words):
+    def __init__(self, words, stopword_function=little_word):
         self.seen = set()
         has_been_seen = lambda w: w in self.seen
         lower = lambda w: w.lower()
-        self.words = iter(cycle(filterfalse(has_been_seen, map(lower, words))))
+        self.words = iter(cycle(
+            filterfalse(has_been_seen,
+                        filterfalse(stopword_function, map(lower, words)))))
+        self.stopword = stopword_function
         self.replacements = {}
 
     def find_replacement(self, word):
         word = word.lower()
+        if self.stopword(word):
+            return word
         if word not in self.replacements:
             self.replacements[word] = self.next_replacement()
         return self.replacements[word]

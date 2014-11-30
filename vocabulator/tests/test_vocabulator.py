@@ -1,10 +1,10 @@
 from vocabulator.documents import Document, PartOfSpeech
-from vocabulator.vocabulator import Vocabulator, words_from, Replacements
+from vocabulator.vocabulator import Vocabulator, words_from, Replacements, little_word
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very
 bored!  When the party was over he went home and ate cake.  It was
-delicious!  The cake was so filling that he went to sleep.
+delicious!  The cake was so filling that he went immediately to sleep.
 
 When he woke up, he had to go buy some tools.  It was boring too.
 """
@@ -18,11 +18,11 @@ a badger with purple spines!
 def test_meatify():
     v = Vocabulator(document=Document(SOURCE_TEXT), nouns=['meat'], adverbs=['dreamily'])
     assert v.vocabulate() == """
-Dreamily there was a meat.  He had a meat.  He went to a meat.  He was dreamily
+Once there was a meat.  He had a meat.  He went to a meat.  He was very
 bored!  When the meat was over he went meat and ate meat.  It was
-delicious!  The meat was dreamily filling that he went to sleep.
+delicious!  The meat was so filling that he went dreamily to sleep.
 
-When he woke up, he had to go buy some meat.  It was boring dreamily.
+When he woke up, he had to go buy some meat.  It was boring too.
 """
 
 
@@ -31,7 +31,7 @@ def test_swap_nouns():
     assert v.vocabulate() == """
 Once there was a scientist.  He had a day.  He went to a wood.  He was very
 bored!  When the wood was over he went badger and ate spine.  It was
-delicious!  The spine was so filling that he went to sleep.
+delicious!  The spine was so filling that he went immediately to sleep.
 
 When he woke up, he had to go buy some scientists.  It was boring too.
 """
@@ -80,6 +80,17 @@ desk -> eye
 lens -> elbow
 table -> hand
 """
+
+
+def test_replacements_ignore_stopwords():
+    r = Replacements(['elbow', 'a', 'n', 't'], little_word)
+    # should not replace stopwords:
+    assert r.find_replacement('n') == 'n'
+    assert r.find_replacement('w') == 'w'
+    assert r.find_replacement('it') == 'it'
+    # should not use stopwords from replacement source:
+    assert r.find_replacement('hat') == 'elbow'
+    assert r.find_replacement('cat') == 'elbow'
 
 
 def test_should_not_mistake_things_for_nouns_if_they_have_no_letters():
