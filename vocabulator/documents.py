@@ -33,6 +33,7 @@ class Document:
 
 class PartOfSpeech(Enum):
     noun = ('NN', 'NNS')
+    adverb = ('RB')
 
     def __init__(self, *options):
         self.options = options

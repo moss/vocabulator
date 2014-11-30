@@ -16,13 +16,13 @@ a badger with purple spines!
 
 
 def test_meatify():
-    v = Vocabulator(document=Document(SOURCE_TEXT), nouns=['meat'])
+    v = Vocabulator(document=Document(SOURCE_TEXT), nouns=['meat'], adverbs=['dreamily'])
     assert v.vocabulate() == """
-Once there was a meat.  He had a meat.  He went to a meat.  He was very
+dreamily there was a meat.  He had a meat.  He went to a meat.  He was dreamily
 bored!  When the meat was over he went meat and ate meat.  It was
-delicious!  The meat was so filling that he went to sleep.
+delicious!  The meat was dreamily filling that he went to sleep.
 
-When he woke up, he had to go buy some meat.  It was boring too.
+When he woke up, he had to go buy some meat.  It was boring dreamily.
 """
 
 

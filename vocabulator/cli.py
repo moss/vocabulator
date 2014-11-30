@@ -2,12 +2,13 @@
 vocabulator - Create hybrid novels.
 
 Usage:
-  vocabulator (-n <noun-text> | -N <nouns>) [-m] <target-text>
+  vocabulator (-n <noun-text> | -N <nouns>) [-a <adverb-text>] [-m] <target-text>
 
 Options:
-  -n --nouns-from     Specify a source text to provide nouns for the hybrid.
-  -N --nouns          Give a (comma-delimited) list of nouns to use.
-  -m --print-mapping  List word mapping used at the end of the text.
+  -a --adverbs-from     Specify source text for adverbs for hybrid.
+  -n --nouns-from       Specify source text for nouns for hybrid.
+  -N --nouns            Give a (comma-delimited) list of nouns to use.
+  -m --print-mapping    List word mapping used at the end of the text.
 """
 from docopt import docopt
 
@@ -28,8 +29,14 @@ class VocabulatorOptions:
         elif self.options['--nouns']:
             return self.options['<nouns>'].split(',')
 
+    def adverbs(self):
+        if self.options['--adverbs-from']:
+            return words_from(Document.from_file(self.options['<adverb-text>']), PartOfSpeech.adverb)
+        else:
+            return None
+
     def vocabulator(self):
-        return Vocabulator(document=self.document(), nouns=self.nouns())
+        return Vocabulator(document=self.document(), nouns=self.nouns(), adverbs=self.adverbs())
 
     @property
     def print_mapping(self):
@@ -42,4 +49,9 @@ def vocabulator():
     print(v.vocabulate())
     print()
     if opt.print_mapping:
-        v.replacements.print_mapping()
+        print("Noun Mapping:")
+        v.noun_replacements.print_mapping()
+        print()
+        if v.adverb_replacements:
+            print("Adverb Mapping:")
+            v.adverb_replacements.print_mapping()

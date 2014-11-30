@@ -3,15 +3,21 @@ from vocabulator.documents import PartOfSpeech
 
 
 class Vocabulator:
-    def __init__(self, document=None, nouns=None):
+    def __init__(self, document=None, nouns=None, adverbs=None):
         self.document = document
-        self.replacements = Replacements(nouns)
-        self.nouns = nouns
+        self.noun_replacements = Replacements(nouns)
+        if adverbs is not None:
+            self.adverb_replacements = Replacements(adverbs)
+        else:
+            self.adverb_replacements = None
 
     def vocabulate(self):
         for chunk in self.document.chunks:
             if chunk.is_pos(PartOfSpeech.noun):
-                replacement = self.replacements.find_replacement(chunk.singular_form())
+                replacement = self.noun_replacements.find_replacement(chunk.singular_form())
+                chunk.replace_with(replacement)
+            if chunk.is_pos(PartOfSpeech.adverb) and self.adverb_replacements is not None:
+                replacement = self.adverb_replacements.find_replacement(chunk.word)
                 chunk.replace_with(replacement)
         return str(self.document)
 
