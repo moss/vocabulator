@@ -18,7 +18,7 @@ a badger with purple spines!
 def test_meatify():
     v = Vocabulator(document=Document(SOURCE_TEXT), nouns=['meat'], adverbs=['dreamily'])
     assert v.vocabulate() == """
-dreamily there was a meat.  He had a meat.  He went to a meat.  He was dreamily
+Dreamily there was a meat.  He had a meat.  He went to a meat.  He was dreamily
 bored!  When the meat was over he went meat and ate meat.  It was
 delicious!  The meat was dreamily filling that he went to sleep.
 
@@ -54,6 +54,15 @@ def test_replacements_will_replace_stably_and_avoid_reusing_duplicated_words():
     assert r.find_replacement('table') == 'hand'  # stable replacements for same word later on
     assert r.find_replacement('desk') == 'eye'  # skips duplicates in source noun list
     assert r.find_replacement('lens') == 'elbow'  # finally does loop back around again
+
+
+def test_replacing_a_word_preserves_case():
+    d = Document('This is A TEST.')
+    d.chunks[0].replace_with('something')
+    d.chunks[2].replace_with('was')
+    d.chunks[4].replace_with('the')
+    d.chunks[6].replace_with('result')
+    assert str(d) == 'Something was The RESULT.'
 
 
 def test_replacements_are_printable(capsys):

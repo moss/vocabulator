@@ -6,10 +6,10 @@
 
 # WIP
 
+* Correct capitalization
 
 # TODO
 
-* Correct capitalization
 * Stopwords not to map
 
 # Someday/Maybe

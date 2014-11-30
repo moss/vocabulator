@@ -47,10 +47,21 @@ class Chunk:
         self.replacement = None
 
     def replace_with(self, replacement):
-        self.replacement = replacement
+        self.replacement = self.match_original_formatting(replacement)
+
+    @property
+    def original(self):
+        return self.source[self.start:self.end]
 
     def __str__(self):
-        return self.replacement or self.source[self.start:self.end]
+        return self.replacement or self.original
+
+    def match_original_formatting(self, replacement):
+        if self.original.istitle():
+            return replacement.title()
+        if self.original.isupper():
+            return replacement.upper()
+        return replacement
 
 
 class InterstitialChunk(Chunk):
