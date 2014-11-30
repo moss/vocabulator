@@ -8,26 +8,26 @@ def little_word(word):
 
 def skippable_adverb(word):
     # non -ly adverbs generally prove to be bad for replacing
-    return (not word.endswith('ly')) or word in {'only', 'nearly', 'previously', 'usually', 'fairly`'}
+    return (not word.endswith('ly')) or word in {'only', 'nearly', 'previously', 'usually', 'fairly'}
 
 
 class Vocabulator:
-    def __init__(self, document=None, nouns=None, adverbs=None):
+    def __init__(self, document=None, nouns=None, adverbs=None, proper_nouns=None):
         self.document = document
-        self.noun_replacements = Replacements(nouns, little_word)
+        self.replacements_by_pos = {}
+        if nouns is not None:
+            self.replacements_by_pos[PartOfSpeech.noun] = Replacements(nouns, little_word)
         if adverbs is not None:
-            self.adverb_replacements = Replacements(adverbs, skippable_adverb)
-        else:
-            self.adverb_replacements = None
+            self.replacements_by_pos[PartOfSpeech.adverb] = Replacements(adverbs, skippable_adverb)
+        if proper_nouns is not None:
+            self.replacements_by_pos[PartOfSpeech.proper_noun] = Replacements(proper_nouns, little_word)
 
     def vocabulate(self):
         for chunk in self.document.chunks:
-            if chunk.is_pos(PartOfSpeech.noun):
-                replacement = self.noun_replacements.find_replacement(chunk.singular_form())
-                chunk.replace_with(replacement)
-            if chunk.is_pos(PartOfSpeech.adverb) and self.adverb_replacements is not None:
-                replacement = self.adverb_replacements.find_replacement(chunk.word)
-                chunk.replace_with(replacement)
+            for pos, replacements in self.replacements_by_pos.items():
+                if chunk.is_pos(pos):
+                    replacement = replacements.find_replacement(chunk.base_form())
+                    chunk.replace_with(replacement)
         return str(self.document)
 
 
@@ -64,4 +64,4 @@ class Replacements:
 
 
 def words_from(document, pos):
-    return [c.singular_form() for c in document.chunks if c.is_pos(pos)]
+    return [c.base_form() for c in document.chunks if c.is_pos(pos)]

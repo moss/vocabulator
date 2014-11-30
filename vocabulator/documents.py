@@ -33,6 +33,7 @@ class Document:
 
 class PartOfSpeech(Enum):
     noun = ('NN', 'NNS')
+    proper_noun = ('NNP')
     adverb = ('RB')
 
     def __init__(self, *options):
@@ -90,8 +91,11 @@ class DocWord(Chunk):
             return False
         return self.pos_tag in pos.options
 
-    def singular_form(self):
-        return self.word.singularize()
+    def base_form(self):
+        if self.is_pos(PartOfSpeech.noun):
+            return self.word.singularize()
+        else:
+            return self.word
 
     def replace_with(self, replacement):
         if self.pos_tag == 'NNS':

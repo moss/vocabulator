@@ -26,6 +26,11 @@ When he woke up, he had to go buy some meat.  It was boring too.
 """
 
 
+def Xtest_proper_nouns():
+    v = Vocabulator(document=Document("Bob went to the store."), proper_nouns=['Jill'])
+    assert v.vocabulate() == "Jill went to the store."
+
+
 def test_swap_nouns():
     v = Vocabulator(document=Document(SOURCE_TEXT), nouns=words_from(Document(ANOTHER_SOURCE), PartOfSpeech.noun))
     assert v.vocabulate() == """

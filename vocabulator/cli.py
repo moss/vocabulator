@@ -2,13 +2,14 @@
 vocabulator - Create hybrid novels.
 
 Usage:
-  vocabulator (-n <noun-text> | -N <nouns>) [-a <adverb-text>] [-m] <target-text>
+  vocabulator (-n <noun-text> | -N <nouns>) [-a <adverb-text>] [-p <name-text>] [-m] <target-text>
 
 Options:
-  -a --adverbs-from     Specify source text for adverbs for hybrid.
-  -n --nouns-from       Specify source text for nouns for hybrid.
-  -N --nouns            Give a (comma-delimited) list of nouns to use.
-  -m --print-mapping    List word mapping used at the end of the text.
+  -a --adverbs-from      Specify source text for adverbs for hybrid.
+  -n --nouns-from        Specify source text for nouns for hybrid.
+  -N --nouns             Give a (comma-delimited) list of nouns to use.
+  -p --proper-nouns-from Specify source text for proper nouns for hybrid.
+  -m --print-mapping     List word mapping used at the end of the text.
 """
 from docopt import docopt
 
@@ -35,8 +36,15 @@ class VocabulatorOptions:
         else:
             return None
 
+    def proper_nouns(self):
+        if self.options['--proper-nouns-from']:
+            # WTF DocOpt? Why is this option treated differently? Switch to argparse!
+            return words_from(Document.from_file(self.options['--proper-nouns-from']), PartOfSpeech.proper_noun)
+        else:
+            return None
+
     def vocabulator(self):
-        return Vocabulator(document=self.document(), nouns=self.nouns(), adverbs=self.adverbs())
+        return Vocabulator(document=self.document(), nouns=self.nouns(), adverbs=self.adverbs(), proper_nouns=self.proper_nouns())
 
     @property
     def print_mapping(self):
@@ -50,8 +58,12 @@ def vocabulator():
     print()
     if opt.print_mapping:
         print("Noun Mapping:")
-        v.noun_replacements.print_mapping()
-        print()
-        if v.adverb_replacements:
+        v.replacements_by_pos[PartOfSpeech.noun].print_mapping()
+        if PartOfSpeech.adverb in v.replacements_by_pos:
+            print()
             print("Adverb Mapping:")
-            v.adverb_replacements.print_mapping()
+            v.replacements_by_pos[PartOfSpeech.adverb].print_mapping()
+        if PartOfSpeech.proper_noun in v.replacements_by_pos:
+            print()
+            print("Proper Noun Mapping:")
+            v.replacements_by_pos[PartOfSpeech.proper_noun].print_mapping()

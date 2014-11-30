@@ -8,13 +8,13 @@
 
 # WIP
 
+* Map proper names
 
 # TODO
 
 
 # Someday/Maybe
 
-* Map proper names
 * Improve reading of PG ebooks
 * Automate PG download
 * Map verbs
