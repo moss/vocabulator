@@ -1,20 +1,20 @@
 # Done
 
 * Unify the vocabulator CLI tool
+* Map nouns stably
 
 # WIP
 
 
 # TODO
 
-* Map nouns stably
-* Map by frequency, not first appearance
-* Map verbs
+* Map adverbs
 * Map proper names
 
 # Someday/Maybe
 
 * Improve reading of PG ebooks
 * Automate PG download
+* Map verbs
 * Map adjectives/adverbs/moar?
 * Experiment with looking at meaning
