@@ -2,13 +2,13 @@
 vocabulator - Create hybrid novels.
 
 Usage:
-  vocabulator (-n <noun-text> | -N <nouns>) [-a <adverb-text>] [-p <name-text>] [-m] <target-text>
+  vocabulator (-n <noun-text> | -N <nouns>) [-a <adverb-text>] [-c <name-text>] [-m] <target-text>
 
 Options:
   -a --adverbs-from      Specify source text for adverbs for hybrid.
   -n --nouns-from        Specify source text for nouns for hybrid.
   -N --nouns             Give a (comma-delimited) list of nouns to use.
-  -p --proper-nouns-from Specify source text for proper nouns for hybrid.
+  -c --names-from        Specify source text for character names for hybrid.
   -m --print-mapping     List word mapping used at the end of the text.
 """
 from docopt import docopt
@@ -37,9 +37,8 @@ class VocabulatorOptions:
             return None
 
     def names(self):
-        if self.options['--proper-nouns-from']:
-            # WTF DocOpt? Why is this option treated differently? Switch to argparse!
-            return words_from(Document.from_file(self.options['--proper-nouns-from']), PartOfSpeech.proper_noun)
+        if self.options['--names-from']:
+            return words_from(Document.from_file(self.options['<name-text>']), PartOfSpeech.proper_noun)
         else:
             return None
 
