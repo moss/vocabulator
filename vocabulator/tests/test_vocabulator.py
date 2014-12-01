@@ -27,8 +27,8 @@ When he woke up, he had to go buy some meat.  It was boring too.
 """
 
 
-def Xtest_proper_nouns():
-    v = Vocabulator(document=Document("Bob went to the store."), proper_nouns=['Jill'])
+def test_proper_nouns():
+    v = Vocabulator(document=Document("Jefferson went to the store."), proper_nouns=['Jill'])
     assert v.vocabulate() == "Jill went to the store."
 
 
