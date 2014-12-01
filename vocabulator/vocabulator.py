@@ -1,4 +1,5 @@
 from itertools import cycle, filterfalse
+from textblob import Word
 from vocabulator.documents import PartOfSpeech
 
 
@@ -11,6 +12,28 @@ def skippable_adverb(word):
     return (not word.endswith('ly')) or word in {'only', 'nearly', 'previously', 'usually', 'fairly'}
 
 
+
+def skippable_proper_noun(word):
+    # All kinds of words get misclassified as proper nouns, to a degree that's really ridiculous.
+    # To limit this, skip all words that have dictionary definitions.
+    return len(word) <= 3 or non_person_word(word) or word in {'myself', 'his', 'towards'}
+
+
+def non_person_word(word):
+    synsets = Word(word).synsets
+    if not synsets:
+        return False
+    non_person_meanings = [s for s in synsets if not kind_of_person(s)]
+    return len(non_person_meanings) > 0
+
+
+def kind_of_person(synset):
+    # I HAVE NO IDEA WHAT I'M DOING!!!1
+    hypernym_chain = synset.closure(lambda s: s.hypernyms() + s.instance_hypernyms())
+    hypernym_names = [h.name() for h in hypernym_chain]
+    return 'person.n.01' in hypernym_names
+
+
 class Vocabulator:
     def __init__(self, document=None, nouns=None, adverbs=None, proper_nouns=None):
         self.document = document
@@ -20,7 +43,7 @@ class Vocabulator:
         if adverbs is not None:
             self.replacements_by_pos[PartOfSpeech.adverb] = Replacements(adverbs, skippable_adverb)
         if proper_nouns is not None:
-            self.replacements_by_pos[PartOfSpeech.proper_noun] = Replacements(proper_nouns, little_word)
+            self.replacements_by_pos[PartOfSpeech.proper_noun] = Replacements(proper_nouns, skippable_proper_noun)
 
     def vocabulate(self):
         for chunk in self.document.chunks:

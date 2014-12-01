@@ -89,6 +89,8 @@ class DocWord(Chunk):
     def is_pos(self, pos: PartOfSpeech):
         if not re.match(r"[A-Za-z']+$", self.word):
             return False
+        if pos == PartOfSpeech.proper_noun and self.word.islower():
+            return False  # Try to avoid some misclassifications as proper nouns
         return self.pos_tag in pos.options
 
     def base_form(self):

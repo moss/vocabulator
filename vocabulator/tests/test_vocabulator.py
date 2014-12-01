@@ -1,5 +1,6 @@
 from vocabulator.documents import Document, PartOfSpeech
-from vocabulator.vocabulator import Vocabulator, words_from, Replacements, little_word
+from vocabulator.vocabulator import Vocabulator, words_from, Replacements, little_word, \
+    skippable_proper_noun
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very
@@ -29,6 +30,19 @@ When he woke up, he had to go buy some meat.  It was boring too.
 def Xtest_proper_nouns():
     v = Vocabulator(document=Document("Bob went to the store."), proper_nouns=['Jill'])
     assert v.vocabulate() == "Jill went to the store."
+
+
+def test_should_skip_misclassified_proper_nouns():
+    # we're basically only interested in people's names
+    assert skippable_proper_noun('del')  # too short
+    assert skippable_proper_noun('woods')  # this is a real word
+    assert skippable_proper_noun('india')  # this is a place
+    assert skippable_proper_noun('february')  # this is a month
+    assert skippable_proper_noun('supplied')  # this is a real word
+    # but we do want...
+    assert not skippable_proper_noun('bingley')
+    assert not skippable_proper_noun('catherine')
+    # etc.
 
 
 def test_swap_nouns():
