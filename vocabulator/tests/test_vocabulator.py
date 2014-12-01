@@ -1,6 +1,6 @@
 from vocabulator.documents import Document, PartOfSpeech
 from vocabulator.vocabulator import Vocabulator, words_from, Replacements, little_word, \
-    skippable_proper_noun
+    probably_not_a_name
 
 SOURCE_TEXT = """
 Once there was a man.  He had a hat.  He went to a party.  He was very
@@ -27,38 +27,38 @@ When he woke up, he had to go buy some meat.  It was boring too.
 """
 
 
-def test_proper_nouns():
-    v = Vocabulator(document=Document("Jefferson went to the store."), proper_nouns=['Jill'])
+def test_names():
+    v = Vocabulator(document=Document("Jefferson went to the store."), names=['Jill'])
     assert v.vocabulate() == "Jill went to the store."
 
 
-def test_should_skip_misclassified_proper_nouns():
+def test_should_skip_misclassified_names():
     # we're basically only interested in people's names
-    assert skippable_proper_noun('del')  # too short
-    assert skippable_proper_noun('india')  # this is a place
-    assert skippable_proper_noun('february')  # this is a month
+    assert probably_not_a_name('del')  # too short
+    assert probably_not_a_name('india')  # this is a place
+    assert probably_not_a_name('february')  # this is a month
     # but we do want...
-    assert not skippable_proper_noun('bingley')
-    assert not skippable_proper_noun('catherine')
+    assert not probably_not_a_name('bingley')
+    assert not probably_not_a_name('catherine')
     # but we don't want words that indicate KINDS of peple
-    assert skippable_proper_noun('whaleman')
-    assert skippable_proper_noun('transcriber')
-    assert skippable_proper_noun('pilgrim')
-    assert skippable_proper_noun('cretan')
-    assert skippable_proper_noun('priest')
-    assert skippable_proper_noun('patagonian')
-    assert skippable_proper_noun('shipmates')
-    assert skippable_proper_noun('southerner')
-    assert skippable_proper_noun('czar')
-    assert skippable_proper_noun('landlord')
-    assert skippable_proper_noun('presbyterian')
-    assert skippable_proper_noun('girls')
+    assert probably_not_a_name('whaleman')
+    assert probably_not_a_name('transcriber')
+    assert probably_not_a_name('pilgrim')
+    assert probably_not_a_name('cretan')
+    assert probably_not_a_name('priest')
+    assert probably_not_a_name('patagonian')
+    assert probably_not_a_name('shipmates')
+    assert probably_not_a_name('southerner')
+    assert probably_not_a_name('czar')
+    assert probably_not_a_name('landlord')
+    assert probably_not_a_name('presbyterian')
+    assert probably_not_a_name('girls')
     # or words that are just wildly misclassified
-    assert skippable_proper_noun('supplied')  # this is a real word
-    assert skippable_proper_noun('woods')  # this is a real word
-    assert skippable_proper_noun('thine')
-    assert skippable_proper_noun('methinks')
-    assert skippable_proper_noun('civitas')
+    assert probably_not_a_name('supplied')  # this is a real word
+    assert probably_not_a_name('woods')  # this is a real word
+    assert probably_not_a_name('thine')
+    assert probably_not_a_name('methinks')
+    assert probably_not_a_name('civitas')
 
 
 def test_swap_nouns():

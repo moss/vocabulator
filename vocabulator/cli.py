@@ -36,7 +36,7 @@ class VocabulatorOptions:
         else:
             return None
 
-    def proper_nouns(self):
+    def names(self):
         if self.options['--proper-nouns-from']:
             # WTF DocOpt? Why is this option treated differently? Switch to argparse!
             return words_from(Document.from_file(self.options['--proper-nouns-from']), PartOfSpeech.proper_noun)
@@ -44,7 +44,7 @@ class VocabulatorOptions:
             return None
 
     def vocabulator(self):
-        return Vocabulator(document=self.document(), nouns=self.nouns(), adverbs=self.adverbs(), proper_nouns=self.proper_nouns())
+        return Vocabulator(document=self.document(), nouns=self.nouns(), adverbs=self.adverbs(), names=self.names())
 
     @property
     def print_mapping(self):

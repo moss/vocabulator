@@ -12,10 +12,10 @@ def skippable_adverb(word):
     return (not word.endswith('ly')) or word in {'only', 'nearly', 'previously', 'usually', 'fairly'}
 
 
-
-def skippable_proper_noun(word):
-    # All kinds of words get misclassified as proper nouns, to a degree that's really ridiculous.
-    # To limit this, skip all words that have dictionary definitions.
+def probably_not_a_name(word):
+    # We're only interested in names of characters, not in all proper nouns.
+    # Also, lots of words get misclassified as proper nouns, to a degree that's really ridiculous.
+    # To limit this, skip all words that have dictionary definitions (except ones that are clearly people).
     return len(word) <= 3 or non_person_word(word) or word in {
         'myself',
         'his',
@@ -47,15 +47,15 @@ def kind_of_person(synset):
 
 
 class Vocabulator:
-    def __init__(self, document=None, nouns=None, adverbs=None, proper_nouns=None):
+    def __init__(self, document=None, nouns=None, adverbs=None, names=None):
         self.document = document
         self.replacements_by_pos = {}
         if nouns is not None:
             self.replacements_by_pos[PartOfSpeech.noun] = Replacements(nouns, little_word)
         if adverbs is not None:
             self.replacements_by_pos[PartOfSpeech.adverb] = Replacements(adverbs, skippable_adverb)
-        if proper_nouns is not None:
-            self.replacements_by_pos[PartOfSpeech.proper_noun] = Replacements(proper_nouns, skippable_proper_noun)
+        if names is not None:
+            self.replacements_by_pos[PartOfSpeech.proper_noun] = Replacements(names, probably_not_a_name)
 
     def vocabulate(self):
         for chunk in self.document.chunks:

@@ -5,10 +5,10 @@
 * Map adverbs
 * Correct capitalization
 * Stopwords not to map
+* Map proper names
 
 # WIP
 
-* Map proper names
 
 # TODO
 
