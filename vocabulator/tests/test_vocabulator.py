@@ -35,14 +35,30 @@ def Xtest_proper_nouns():
 def test_should_skip_misclassified_proper_nouns():
     # we're basically only interested in people's names
     assert skippable_proper_noun('del')  # too short
-    assert skippable_proper_noun('woods')  # this is a real word
     assert skippable_proper_noun('india')  # this is a place
     assert skippable_proper_noun('february')  # this is a month
-    assert skippable_proper_noun('supplied')  # this is a real word
     # but we do want...
     assert not skippable_proper_noun('bingley')
     assert not skippable_proper_noun('catherine')
-    # etc.
+    # but we don't want words that indicate KINDS of peple
+    assert skippable_proper_noun('whaleman')
+    assert skippable_proper_noun('transcriber')
+    assert skippable_proper_noun('pilgrim')
+    assert skippable_proper_noun('cretan')
+    assert skippable_proper_noun('priest')
+    assert skippable_proper_noun('patagonian')
+    assert skippable_proper_noun('shipmates')
+    assert skippable_proper_noun('southerner')
+    assert skippable_proper_noun('czar')
+    assert skippable_proper_noun('landlord')
+    assert skippable_proper_noun('presbyterian')
+    assert skippable_proper_noun('girls')
+    # or words that are just wildly misclassified
+    assert skippable_proper_noun('supplied')  # this is a real word
+    assert skippable_proper_noun('woods')  # this is a real word
+    assert skippable_proper_noun('thine')
+    assert skippable_proper_noun('methinks')
+    assert skippable_proper_noun('civitas')
 
 
 def test_swap_nouns():

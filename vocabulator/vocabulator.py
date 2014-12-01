@@ -16,7 +16,17 @@ def skippable_adverb(word):
 def skippable_proper_noun(word):
     # All kinds of words get misclassified as proper nouns, to a degree that's really ridiculous.
     # To limit this, skip all words that have dictionary definitions.
-    return len(word) <= 3 or non_person_word(word) or word in {'myself', 'his', 'towards'}
+    return len(word) <= 3 or non_person_word(word) or word in {
+        'myself',
+        'his',
+        'towards',
+        'patagonian',
+        'thine',
+        'methinks',
+        'civitas',
+        'whaleman',
+        'whilst',
+    }
 
 
 def non_person_word(word):
@@ -28,7 +38,9 @@ def non_person_word(word):
 
 
 def kind_of_person(synset):
-    # I HAVE NO IDEA WHAT I'M DOING!!!1
+    if len(synset.hypernyms()) > 0:
+        # if it has hypernyms, rather than instance hypernyms, it's probably too generic a word
+        return False
     hypernym_chain = synset.closure(lambda s: s.hypernyms() + s.instance_hypernyms())
     hypernym_names = [h.name() for h in hypernym_chain]
     return 'person.n.01' in hypernym_names
